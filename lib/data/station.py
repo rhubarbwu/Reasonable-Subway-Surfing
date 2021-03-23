@@ -1,14 +1,14 @@
 class Station:
     """
-    name: name of the station
-    depth: how deep below the surface the station is
-    idle_time: amount of time spent at this station
-    train: the train object in the observation
-    waiting: number of passengers waiting on the platform
+    name (string): name of the station
+    depth (float): how deep below the surface the station is, in metres
+    idle_time (float): amount of time spent at this station, in seconds
+    train (Train): the train object in the observation
+    waiting (int): number of passengers waiting on the platform
 
-    natural_light: whether or not the platform has natural light
-    platforms: number of platforms
-    rails: number of rails
+    natural_light (bool): whether or not the platform has natural light
+    platforms (int): number of platforms
+    rails (int): number of rails
     """
 
     def __init__(self,

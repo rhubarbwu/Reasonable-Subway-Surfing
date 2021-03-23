@@ -1,8 +1,8 @@
 class Train:
     """
-    direction: (rough) cardinal direction the train is facing
-    length: number of train cars coupled
-    occupancy: number of occupants
+    direction (string): (rough) cardinal direction the train is facing
+    length (int): number of train cars coupled
+    occupancy (int): number of occupants
     """
 
     def __init__(self, direction, length=6, occupancy=150):
