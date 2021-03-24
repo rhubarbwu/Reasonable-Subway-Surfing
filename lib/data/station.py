@@ -1,10 +1,12 @@
+MINUTE = 60
+
+
 class Station:
     """
     name (string): name of the station
-    depth (float): how deep below the surface the station is, in metres
-    idle_time (float): amount of time spent at this station, in seconds
-    train (Train): the train object in the observation
-    waiting (int): number of passengers waiting on the platform
+    idle_time (float, float): mean and variance of amount of time spent
+        at this station, in seconds.
+    ridership (float, float): mean and variance of ridership per period.
 
     natural_light (bool): whether or not the platform has natural light
     platforms (int): number of platforms
@@ -13,21 +15,29 @@ class Station:
 
     def __init__(self,
                  name,
-                 depth,
                  idle_time,
-                 train,
-                 waiting,
-                 natural_light=False,
+                 ridership,
                  platforms=2,
-                 rails=2):
+                 rails=2,
+                 natural_light=False):
 
+        # name (used in substring matching)
         self.name = name
 
-        self.depth = depth
+        # Gaussian features. Need VARIANCE VALUES!
+        self.main_colour = None
+        self.secondary_colour = None
         self.idle_time = idle_time
-        self.train = train
-        self.waiting = waiting
+        self.ridership = ridership
 
+        # Classification features.
         self.natural_light = natural_light
         self.platforms = platforms
         self.rails = rails
+
+        # Potential next stations.
+        self.connections = []
+
+    def connect(self, other):
+        self.connections.append(other)
+        other.connections.append(self)
