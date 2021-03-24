@@ -1,3 +1,6 @@
+from math import sqrt
+from random import gauss
+
 MINUTE = 60
 
 
@@ -15,8 +18,8 @@ class Station:
 
     def __init__(self,
                  name,
-                 idle_time,
-                 ridership,
+                 idle_time=(0., 0.),
+                 ridership=(0., 0.),
                  platforms=2,
                  rails=2,
                  natural_light=False):
@@ -41,3 +44,8 @@ class Station:
     def connect(self, other):
         self.connections.append(other)
         other.connections.append(self)
+
+    def generate_observation(self):
+        idle_time = gauss(self.idle_time[0], sqrt(self.idle_time[1]))
+        ridership = gauss(self.ridership[0], sqrt(self.ridership[1]))
+        return idle_time, ridership

@@ -1,4 +1,4 @@
-from station import *
+from station import MINUTE, Station
 
 # Assume an average of 5min per train for 18h each day.
 TRAIN_FREQUENCY = 18 * 12
@@ -144,7 +144,10 @@ Spadina1.connect(Spadina2)
 StGeorge1.connect(StGeorge2)
 
 # Sanity check.
-for line in [Line1, Line2, Line3, Line4]:
-    for station in line:
-        print(station.name, station.ridership)
-    print()
+if __name__ == "__main__":
+    for line in [Line1, Line2, Line3, Line4]:
+        for station in line:
+            print(station.name, station.idle_time, station.ridership)
+            for i in range(5):
+                print("\t", station.generate_observation())
+            print()
