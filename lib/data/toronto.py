@@ -25,7 +25,7 @@ def TTCStation(name,
 # http://www.ttc.ca/PDF/Transit_Planning/Subway%20ridership%20-%202018.pdf
 
 # Line 1: Yonge-University-Spadina
-BloorYonge1 = Station("Bloor-Yonge", 31, 204630)
+BloorYonge1 = TTCStation("Bloor-Yonge", 31, 204630)
 College = TTCStation("College", 16, 44370)
 Davisville = TTCStation("Davisville", 14, 25990, 3, 3, True)
 DownsviewPark = TTCStation("Downsview Park", 12, 2520, 1, natural_light=True)
@@ -143,11 +143,71 @@ SheppardYonge1.connect(SheppardYonge4)
 Spadina1.connect(Spadina2)
 StGeorge1.connect(StGeorge2)
 
+def normalize(v):
+    n=sum(v)
+    return [x/n for x in v]
+
+def state_model(line,i,action):
+    ret=[0 for _ in range(len(line))]
+    state_model_mtx = {-1:{-1:0.85, 0:0.10, 1:0.05},
+                       0: {-1:0.05, 0:0.90, 1:0.05},
+                       1: {-1:0.05, 0:0.10, 1:0.85}}
+    for chi in [-1,0,1]:
+        dest=i+chi
+        dest=max(min(dest,len(line)-1),0) #clip to 0 len(line)-1
+        ret[dest]+=state_model_mtx[action][chi]
+    return ret
+def predict(x,action,line):
+    ret=[0 for _ in x]
+    for i in range(len(line)):
+        transition=state_model(line,i,action)
+        for j in range(len(line)):
+            ret[j]+=x[i]*transition[j]
+    assert(abs(sum(ret)-1)<1e-5)
+    return ret # should sum  to 1 already
+
+def print_beautify(v,n_digits=2):
+    v=[round(x,n_digits) for x in v]
+    print(v)
+def update(x,observation,line):
+    ret=[0 for _ in x]
+    for i in range(len(line)):
+        p=line[i].probability_of_observation(*observation)
+        ret[i]=p*x[i]
+    return normalize(ret)
+def sim1():
+    observations=[]
+    line=Line1
+    for i in range(1,len(line)):
+        station=line[i]
+        obs=station.generate_observation()
+        observations.append(obs)
+        print(station.probability_of_observation(*obs))
+    number_of_states=len(line)
+    actions=[1 for _ in range(number_of_states-1)]
+    assert len(actions)==len(observations),f"got {len(actions)} actions and {len(observations)} observations"
+    x=normalize([1 for _ in range(number_of_states)])
+    for action,observation in zip(actions,observations):
+        print_beautify(x)
+        x=predict(x,action,line)
+        x=update(x,observation,line)
+    print_beautify(x)
+
+#[5.7655871865019284e-15, 3.965215789407531e-14, 2.1483502717157234e-13, 1.0253334890517646e-12, 4.487573764885683e-12, 1.8357179825539165e-11,
+# 7.09214009741908e-11, 2.6040092872702793e-10, 9.122745558886665e-10, 3.0574221854079006e-09, 9.819251076207512e-09, 3.025375769725532e-08, 8.948595383105199e-08,
+# 2.5419039643931923e-07, 6.934790243843388e-07, 1.8168757307594495e-06, 4.569850394041275e-06, 1.1029574511996352e-05, 2.552843310517507e-05, 5.6619236384370575e-05,
+# 0.00012022190754635388, 0.00024413498274787404, 0.0004735807279211901, 0.0008764243205131145, 0.001545197934981511, 0.002591569449722928, 0.004128541447176587, 0.006238124105687262,
+# 0.008928526853023689, 0.012094498421899256, 0.015502108905638598, 0.018819277066814365, 0.02169630498024358, 0.023880339223089634, 0.025400287436600583, 0.028355060921466738,
+# 0.06801444371696445, 0.7609907120743025]
+
 # Sanity check.
 if __name__ == "__main__":
-    for line in [Line1, Line2, Line3, Line4]:
-        for station in line:
-            print(station.name, station.idle_time, station.ridership)
-            for i in range(5):
-                print("\t", station.generate_observation())
-            print()
+    # for line in [Line1,Line2, Line3, Line4]:
+    #     for station in line:
+    #         print(station.name)
+    #         print("idle time: ", station.idle_time)
+    #         print("ridership: ", station.ridership)
+    #         for i in range(5):
+    #             print("\t", station.generate_observation())
+    #         print()
+    sim1()

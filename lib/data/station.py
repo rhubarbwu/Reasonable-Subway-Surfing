@@ -1,4 +1,4 @@
-from math import sqrt
+import math
 from random import gauss
 
 MINUTE = 60
@@ -30,6 +30,8 @@ class Station:
         # Gaussian features. Need VARIANCE VALUES!
         self.main_colour = None
         self.secondary_colour = None
+        assert(len(idle_time)==2)
+        assert(len(ridership)==2)
         self.idle_time = idle_time
         self.ridership = ridership
 
@@ -46,6 +48,15 @@ class Station:
         other.connections.append(self)
 
     def generate_observation(self):
-        idle_time = gauss(self.idle_time[0], sqrt(self.idle_time[1]))
-        ridership = gauss(self.ridership[0], sqrt(self.ridership[1]))
+        idle_time = gauss(self.idle_time[0], math.sqrt(self.idle_time[1]))
+        ridership = gauss(self.ridership[0], math.sqrt(self.ridership[1]))
         return idle_time, ridership
+    def probability_of_observation(self,idle_time,ridership):
+        def normpdf(x, mean, sd):
+            var = sd**2
+            denom = (2*math.pi*var)**.5
+            num = math.exp(-(x-mean)**2/(2*var))
+            return num/denom
+        p1=normpdf(idle_time,self.idle_time[0], math.sqrt(self.idle_time[1]))
+        p2=normpdf(ridership,self.ridership[0], math.sqrt(self.ridership[1]))
+        return p1*p2
