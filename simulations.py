@@ -3,23 +3,35 @@ from lib.data.toronto import *
 from lib.model import *
 
 
-def generate_observations_on_line(line, start, end):
-    return [line[i].generate_observation() for i in range(start, end)]
+def print_beautify(curr_ll, k):
+    states = zip(Network, curr_ll)
+
+    top_k = sorted(states, key=lambda x: -x[1])
+    print()
+    for i in range(k):
+        print(top_k[i][0].name, top_k[i][1])
+
+
+def run_simulation_top_k(stations, k, conn_const, verbose=False):
+    PAM = build_probabilistic_adjacency(Network, 2)
+
+    observations = [s.generate_observation() for s in stations]
+    ll = execute_simulation(observations, Network, PAM, verbose)
+
+    if verbose:
+        for curr_ll in ll:
+            print_beautify(curr_ll, k)
+
+    return ll
 
 
 def line_1_vaughan_to_finch():
-    line = Line1
-    observations = generate_observations_on_line(Line1, 1, len(Line1))
-    execute_simulation(observations, Line1)
-
-
-def line_1_stgeorge_to_bloor():
-    start = Line1.index(Osgoode)
-    end = Line1.index(Finch)
-    observations = generate_observations_on_line(Line1, start, end)
-    execute_simulation(observations, Line1)
+    stations = Line1
+    k = 5
+    conn_const = 1
+    run_simulation_top_k(stations, k, conn_const)
 
 
 if __name__ == "__main__":
     line_1_vaughan_to_finch()
-    line_1_stgeorge_to_bloor()
+    # stgeorge_spadina_cycle()

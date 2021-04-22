@@ -1,5 +1,7 @@
 from lib.data.station import MINUTE, Station
 
+import math
+
 # Assume an average of 5min per train for 18h each day.
 TRAIN_FREQUENCY = 18 * 12
 
@@ -10,13 +12,9 @@ def TTCStation(name,
                platforms=2,
                rails=2,
                natural_light=False):
-    # TODO: define or generate legitimate variances
-    if type(idle_time) == int:
-        idle_time = (idle_time, 1.5)
-    if type(daily_ridership) == int:
-        daily_ridership = (daily_ridership, daily_ridership / 5)
-    ridership = (daily_ridership[0] / TRAIN_FREQUENCY,
-                 daily_ridership[1] / TRAIN_FREQUENCY)
+    idle_time = (idle_time, idle_time / 6)
+    ridership = daily_ridership / TRAIN_FREQUENCY
+    ridership = (ridership, ridership / 6)
 
     return Station(name, idle_time, ridership, platforms, rails, natural_light)
 
@@ -25,7 +23,7 @@ def TTCStation(name,
 # http://www.ttc.ca/PDF/Transit_Planning/Subway%20ridership%20-%202018.pdf
 
 # Line 1: Yonge-University-Spadina
-BloorYonge1 = TTCStation("Bloor-Yonge", 31, 204630)
+BloorYonge1 = TTCStation("Bloor-Yonge (1)", 31, 204630)
 College = TTCStation("College", 16, 44370)
 Davisville = TTCStation("Davisville", 14, 25990, 3, 3, True)
 DownsviewPark = TTCStation("Downsview Park", 12, 2520, 1, natural_light=True)
@@ -48,12 +46,12 @@ Queen = TTCStation("Queen", 14, 48700)
 QueensPark = TTCStation("Queen's Park", 17, 46470, 1)
 Rosedale = TTCStation("Rosedale", 15, 7770, natural_light=True)
 SheppardWest = TTCStation("Sheppard West", 20, 41600, 1, natural_light=True)
-SheppardYonge1 = TTCStation("Sheppard-Yonge", 23, 79720, 1)
-Spadina1 = TTCStation("Spadina", 14, 12620)
+SheppardYonge1 = TTCStation("Sheppard-Yonge (1)", 23, 79720, 1)
+Spadina1 = TTCStation("Spadina (1)", 14, 12620)
 StAndrew = TTCStation("St. Andrew", 15, 57480, 1)
 StClair = TTCStation("St. Clair", 14, 36620)
 StClairWest = TTCStation("St. Clair West", 13, 27980)
-StGeorge1 = TTCStation("St. George", 20, 130850, 1)
+StGeorge1 = TTCStation("St. George (1)", 20, 130850, 1)
 StPatrick = TTCStation("St. Patrick", 15, 34060, 1)
 Summerhill = TTCStation("Summerhill", 14, 5710)
 Union = TTCStation("Union", 23, 143740)
@@ -67,7 +65,7 @@ Wilson = TTCStation("Wilson", 19, 29260, 1, natural_light=True)
 # Line 2: Bloor-Danforth
 Bathurst = TTCStation("Bathurst", 16, 26800)
 Bay = TTCStation("Bay", 14, 32690)
-BloorYonge2 = TTCStation("Bloor-Yonge", 28, 196460)
+BloorYonge2 = TTCStation("Bloor-Yonge (2)", 28, 196460)
 Broadview = TTCStation("Broadview", 17, 32670)
 CastleFrank = TTCStation("Castle Frank", 13, 9760)
 Chester = TTCStation("Chester", 14, 5800)
@@ -81,7 +79,7 @@ HighPark = TTCStation("High Park", 14, 12080, natural_light=True)
 Islington = TTCStation("Islington", 18, 41270, 1)
 Jane = TTCStation("Jane", 14, 20110)
 Keele = TTCStation("Keele", 14, 16990, natural_light=True)
-Kennedy2 = TTCStation("Kennedy", 5 * MINUTE + 41, 80070)
+Kennedy2 = TTCStation("Kennedy (2)", 5 * MINUTE + 41, 80070)
 Kipling = TTCStation("Kipling", 5 * MINUTE + 18, 49340, 1, natural_light=True)
 Lansdowne = TTCStation("Lansdowne", 13, 19000)
 MainStreet = TTCStation("Main Street", 15, 23950)
@@ -91,15 +89,15 @@ Pape = TTCStation("Pape", 17, 27080)
 RoyalYork = TTCStation("Royal York", 15, 22800)
 Runnymede = TTCStation("Runnymede", 14, 20110)
 Sherbourne = TTCStation("Sherbourne", 16, 31030)
-Spadina2 = TTCStation("Spadina", 17, 31940)
-StGeorge2 = TTCStation("St. George", 24, 125180, 1)
+Spadina2 = TTCStation("Spadina (2)", 17, 31940)
+StGeorge2 = TTCStation("St. George (2)", 24, 125180, 1)
 VictoriaPark = TTCStation("Victoria Park", 15, 30780, natural_light=True)
 Warden = TTCStation("Warden", 17, 39980, 1, natural_light=True)
 Woodbine = TTCStation("Woodbine", 15, 14960)
 
 # Line 3: Scarborough
 Ellesmere = TTCStation("Ellesmere", 13, 1770)
-Kennedy3 = TTCStation("Kennedy", 25, 31120)
+Kennedy3 = TTCStation("Kennedy (3)", 25, 31120)
 LawrenceEast = TTCStation("Lawrence East", 14, 7930)
 McCowan = TTCStation("McCowan", 3 * MINUTE, 3860)
 Midland = TTCStation("Midland", 13, 2440)
@@ -110,7 +108,7 @@ Bayview = TTCStation("Bayview", 14, 8530)
 Bessarion = TTCStation("Bessarion", 14, 2990)
 DonMills = TTCStation("Don Mills", 5 * MINUTE + 14, 37050, 1)
 Leslie = TTCStation("Leslie", 14, 5990)
-SheppardYonge4 = TTCStation("Sheppard-Yonge", 4 * MINUTE + 49, 45750, 3)
+SheppardYonge4 = TTCStation("Sheppard-Yonge (4)", 4 * MINUTE + 49, 45750, 3)
 
 # Station ordering.
 Line1 = [
@@ -130,6 +128,7 @@ Line2 = [
 ]
 Line3 = [Kennedy3, LawrenceEast, Ellesmere, Midland, ScarboroughCentre, McCowan]
 Line4 = [SheppardYonge4, Bayview, Bessarion, Leslie, DonMills]
+Network = Line1 + Line2 + Line3 + Line4
 
 # Natural line connections.
 for line in [Line1, Line2, Line3, Line4]:
@@ -142,13 +141,6 @@ Kennedy2.connect(Kennedy3)
 SheppardYonge1.connect(SheppardYonge4)
 Spadina1.connect(Spadina2)
 StGeorge1.connect(StGeorge2)
-
-#[5.7655871865019284e-15, 3.965215789407531e-14, 2.1483502717157234e-13, 1.0253334890517646e-12, 4.487573764885683e-12, 1.8357179825539165e-11,
-# 7.09214009741908e-11, 2.6040092872702793e-10, 9.122745558886665e-10, 3.0574221854079006e-09, 9.819251076207512e-09, 3.025375769725532e-08, 8.948595383105199e-08,
-# 2.5419039643931923e-07, 6.934790243843388e-07, 1.8168757307594495e-06, 4.569850394041275e-06, 1.1029574511996352e-05, 2.552843310517507e-05, 5.6619236384370575e-05,
-# 0.00012022190754635388, 0.00024413498274787404, 0.0004735807279211901, 0.0008764243205131145, 0.001545197934981511, 0.002591569449722928, 0.004128541447176587, 0.006238124105687262,
-# 0.008928526853023689, 0.012094498421899256, 0.015502108905638598, 0.018819277066814365, 0.02169630498024358, 0.023880339223089634, 0.025400287436600583, 0.028355060921466738,
-# 0.06801444371696445, 0.7609907120743025]
 
 # Sanity check.
 if __name__ == "__main__":
