@@ -13,9 +13,10 @@ def predict(x, action, line):
     return ret  # should sum to 1 already
 
 
-def print_beautify(v, n_digits=2):
+def print_beautify(stations, v, n_digits=2):
     v = [round(x, n_digits) for x in v]
-    print(v)
+    for i in range(len(v)):
+        print(stations[i].name, v[i])
 
 
 state_model_mtx = {
@@ -64,7 +65,7 @@ def execute_simulation(observations, line):
     ), f"got {len(actions)} actions and {len(observations)} observations"
     x = normalize([1 for _ in range(len(line))])
     for action, observation in zip(actions, observations):
-        print_beautify(x)
+        # print_beautify(line, x)
         x = predict(x, action, line)
         x = update(x, observation, line)
-    print_beautify(x)
+    print_beautify(line, x)
