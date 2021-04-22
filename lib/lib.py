@@ -3,13 +3,14 @@ from lib.data.toronto import *
 from lib.model import *
 
 
-def print_beautify(curr_ll, k):
+def print_beautify(station, observation, curr_ll, k):
     states = zip(Network, curr_ll)
 
     top_k = sorted(states, key=lambda x: -x[1])
-    print()
+    print("\nAt {} with idle time of {}s, and {} patrons, estimations:".format(
+        station.name, round(observation[0], 2), round(observation[1])))
     for i in range(k):
-        print(top_k[i][0].name, top_k[i][1])
+        print("\t", top_k[i][0].name, top_k[i][1])
 
 
 def run_simulation_top_k(stations, k, conn_const, verbose=False):
@@ -19,19 +20,7 @@ def run_simulation_top_k(stations, k, conn_const, verbose=False):
     ll = execute_simulation(observations, Network, PAM, verbose)
 
     if verbose:
-        for curr_ll in ll:
-            print_beautify(curr_ll, k)
+        for i in range(len(stations)):
+            print_beautify(stations[i], observations[i], ll[i + 1], k)
 
     return ll
-
-
-def line_1_vaughan_to_finch():
-    stations = Line1
-    k = 5
-    conn_const = 1
-    run_simulation_top_k(stations, k, conn_const)
-
-
-if __name__ == "__main__":
-    line_1_vaughan_to_finch()
-    # stgeorge_spadina_cycle()

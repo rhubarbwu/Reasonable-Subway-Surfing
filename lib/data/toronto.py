@@ -6,15 +6,16 @@ import math
 TRAIN_FREQUENCY = 18 * 12
 
 
+# Custom Station constructor.
 def TTCStation(name,
                idle_time,
                daily_ridership,
                platforms=2,
                rails=2,
                natural_light=False):
-    idle_time = (idle_time, idle_time / 6)
+    idle_time = (idle_time, idle_time / math.tau)
     ridership = daily_ridership / TRAIN_FREQUENCY
-    ridership = (ridership, ridership / 6)
+    ridership = (ridership, ridership / math.tau)
 
     return Station(name, idle_time, ridership, platforms, rails, natural_light)
 
@@ -128,7 +129,6 @@ Line2 = [
 ]
 Line3 = [Kennedy3, LawrenceEast, Ellesmere, Midland, ScarboroughCentre, McCowan]
 Line4 = [SheppardYonge4, Bayview, Bessarion, Leslie, DonMills]
-Network = Line1 + Line2 + Line3 + Line4
 
 # Natural line connections.
 for line in [Line1, Line2, Line3, Line4]:
@@ -141,6 +141,9 @@ Kennedy2.connect(Kennedy3)
 SheppardYonge1.connect(SheppardYonge4)
 Spadina1.connect(Spadina2)
 StGeorge1.connect(StGeorge2)
+
+# Entire subway system network.
+Network = Line1 + Line2 + Line3 + Line4
 
 # Sanity check.
 if __name__ == "__main__":
