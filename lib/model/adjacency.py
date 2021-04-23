@@ -1,4 +1,5 @@
 import numpy as np
+from lib.data.toronto import *
 
 
 def build_probabilistic_adjacency(stations, conn_const):
@@ -18,3 +19,9 @@ def build_probabilistic_adjacency(stations, conn_const):
         prob_adj_matrix[i][i] = 1 / weight
 
     return prob_adj_matrix
+
+if __name__ == "__main__":
+    PAM = build_probabilistic_adjacency(Network, 2)
+    #print(PAM[:20,:20])
+    for row in PAM[:20,:20]:
+        print(list(row))

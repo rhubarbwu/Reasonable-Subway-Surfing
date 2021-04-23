@@ -1,6 +1,6 @@
 from lib.lib import *
 from test.simulations import simulations
-
+from visualize_likelihood import show_likelihoods
 import sys
 
 experiment = sys.argv[1]
@@ -12,4 +12,6 @@ if len(sys.argv) > 3:
 
 stations = simulations[experiment]
 
-run_simulation_top_k(stations, k, conn_const, verbose=True)
+ll=run_simulation_top_k(stations, k, conn_const, verbose=True)
+
+show_likelihoods(ll)
