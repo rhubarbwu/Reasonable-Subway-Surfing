@@ -21,15 +21,16 @@ def build_probabilistic_adjacency(stations):
             compute_matrix_val(stn_i.backward, backward)
             compute_matrix_val(stn_i.forward, forward)
             compute_matrix_val(stn_i.opposite, opposite)
-            compute_matrix_val(stn_i.transfers, transfer)
+            for t in stn_i.transfers:
+                compute_matrix_val(t, transfer)
 
-        # prob_adj_matrix[i][i] = 1 / total_weight
+        prob_adj_matrix[i][i] = 1 / total_weight
 
     return prob_adj_matrix
 
 
 def compute_weight(station):
-    weight = 0
+    weight = 1
     if station.backward:
         weight += backward
     if station.forward:

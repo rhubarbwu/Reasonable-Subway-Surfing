@@ -16,34 +16,26 @@ class Station:
     rails (int): number of rails
     """
 
-    def __init__(self,
-                 name,
-                 idle_time=(0., 0.),
-                 ridership=(0., 0.),
-                 platforms=2,
-                 rails=2,
-                 natural_light=False):
+    def __init__(self, name, idle_time=(0., 0.), ridership=(0., 0.)):
 
         # name (used in substring matching)
         self.name = name
 
         # Gaussian features. Need VARIANCE VALUES!
-        self.main_colour = None
-        self.secondary_colour = None
         assert (len(idle_time) == 2)
         assert (len(ridership) == 2)
         self.idle_time = idle_time
         self.ridership = ridership
 
         # Potential next stations.
-        self.forward = None
         self.backward = None
+        self.forward = None
         self.opposite = None
         self.transfers = []
 
     def generate_observation(self):
-        idle_time = gauss(self.idle_time[0], math.sqrt(self.idle_time[1]))
-        ridership = gauss(self.ridership[0], math.sqrt(self.ridership[1]))
+        idle_time = gauss(self.idle_time[0], self.idle_time[1])
+        ridership = gauss(self.ridership[0], self.ridership[1])
         return idle_time, ridership
 
     def probability_of_observation(self, idle_time, ridership):
@@ -54,8 +46,13 @@ class Station:
             num = math.exp(-(x - mean)**2 / (2 * var))
             return num / denom
 
-        p1 = normpdf(idle_time, self.idle_time[0],
-                     6 * math.sqrt(self.idle_time[1]))
-        p2 = normpdf(ridership, self.ridership[0],
-                     6 * math.sqrt(self.ridership[1]))
+        p1 = normpdf(idle_time, self.idle_time[0], self.idle_time[1])
+        p2 = normpdf(ridership, self.ridership[0], self.ridership[1])
         return p1 * p2
+
+
+def connect_transfer(stations_1, stations_2):
+    for s1 in stations_1:
+        for s2 in stations_2:
+            s1.transfers.append(s2)
+            s2.transfers.append(s1)

@@ -1,11 +1,12 @@
 from .adjacency import build_probabilistic_adjacency
 from .display import print_beautify, rewrap
 from ..data.toronto import Network
+from ..visualization.likelihood import show_likelihoods
 
 import numpy as np
 
 
-def run_simulation_top_k(path, k, verbose=False):
+def run_simulation_top_k(path, k, verbose=False, output_dir=None):
     PAM = build_probabilistic_adjacency(Network)
 
     observations = [s.generate_observation() for s in path]
@@ -15,6 +16,8 @@ def run_simulation_top_k(path, k, verbose=False):
     if verbose:
         for i in range(len(observations)):
             print_beautify(path[i], observations[i], ll[i + 1], k)
+        show_likelihoods("lib/visualization/images/ttc_map.jpg", ll, path,
+                         observations, output_dir)
 
     return ll
 

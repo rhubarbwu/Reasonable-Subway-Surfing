@@ -1,4 +1,4 @@
-from .station import MINUTE, Station
+from .station import MINUTE, Station, connect_transfer
 from .lines import *
 
 import math
@@ -117,6 +117,13 @@ DonMills = TTCTerminus("Don Mills", 5 * MINUTE + 14, 37050)
 Leslie = TTCInterior("Leslie", 14, 5990)
 SheppardYonge4 = TTCTerminus("Sheppard-Yonge (4)", 4 * MINUTE + 49, 45750)
 
+# Transfer connections.
+connect_transfer(Spadina1, Spadina2)
+connect_transfer(StGeorge1, StGeorge2)
+connect_transfer(BloorYonge1, BloorYonge2)
+connect_transfer(SheppardYonge1, SheppardYonge4)
+connect_transfer(Kennedy2, Kennedy3)
+
 # Station ordering.
 Line1 = [
     Vaughan, Highway407, PioneerVillage, YorkUniversity, FinchWest,
@@ -136,8 +143,14 @@ Line2 = [
 Line3 = [Kennedy3, LawrenceEast, Ellesmere, Midland, ScarboroughCentre, McCowan]
 Line4 = [SheppardYonge4, Bayview, Bessarion, Leslie, DonMills]
 
+# Wrapped network, one node per station.
 NetworkWrapped = [s[0] for s in Line1 + Line2 + Line3 + Line4]
+Line1Wrapped = [s[0] for s in Line1]
+Line2Wrapped = [s[0] for s in Line2]
+Line3Wrapped = [s[0] for s in Line3]
+Line4Wrapped = [s[0] for s in Line4]
 
+# Flattened network, two nodes per interior station.
 Line1 = flatten(natural_connections(Line1))
 Line2 = flatten(natural_connections(Line2))
 Line3 = flatten(natural_connections(Line3))
@@ -147,6 +160,7 @@ Line4 = flatten(natural_connections(Line4))
 Network = Line1 + Line2 + Line3 + Line4
 NetworkLengths = [len(Line1), len(Line2), len(Line3), len(Line4)]
 
+# Indices of the terminal so we can rewrap the likelihoods.
 TerminusIndices = [-1]
 for l in NetworkLengths:
     prev = TerminusIndices[-1]

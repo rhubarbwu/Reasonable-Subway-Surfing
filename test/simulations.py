@@ -2,8 +2,6 @@ from lib.data.toronto import *
 
 import random
 
-StGeorgeSpadinaStations = [StGeorge1, StGeorge2, Spadina2, Spadina1]
-
 
 def generate_cycle(stations):
     shift = random.randint(0, len(stations) - 1)
@@ -14,6 +12,8 @@ def generate_cycle(stations):
 
 
 simulations = {
-    "line_1": Line1,
-    "stgeorge_spadina_cycle": generate_cycle(StGeorgeSpadinaStations),
+    "line_1": Line1Wrapped[:],
+    "line_2": Line2Wrapped[:],
+    "line_3": Line2Wrapped[:],
+    "line_4": Line2Wrapped[:],
 }

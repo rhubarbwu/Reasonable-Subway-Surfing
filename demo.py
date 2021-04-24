@@ -1,4 +1,4 @@
-from lib.lib import *
+from lib.model.filter import run_simulation_top_k
 from test.simulations import simulations
 import sys
 
@@ -11,4 +11,6 @@ if len(sys.argv) > 3:
 
 stations = simulations[experiment]
 
-ll=run_simulation_top_k(stations, k, conn_const, verbose=True)
+output_dir = "images"
+output_dir = None
+ll = run_simulation_top_k(stations, k, verbose=True, output_dir=output_dir)
