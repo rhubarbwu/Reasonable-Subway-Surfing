@@ -1,7 +1,8 @@
 from lib.data.station import *
 from lib.data.toronto import *
 from lib.model import *
-
+from lib.visualization.visualize_likelihood import show_likelihoods
+import os
 
 def print_beautify(station, observation, curr_ll, k):
     states = zip(Network, curr_ll)
@@ -23,4 +24,7 @@ def run_simulation_top_k(stations, k, conn_const, verbose=False):
         for i in range(len(stations)):
             print_beautify(stations[i], observations[i], ll[i + 1], k)
 
+        #show_likelihoods()
+        print(os.listdir())
+        show_likelihoods("lib/visualization/images/ttc_map.jpg",ll,stations,observations,"lib/visualization/images")
     return ll
