@@ -1,28 +1,41 @@
+from .adjacency import build_probabilistic_adjacency
+from .display import print_beautify, rewrap
+from ..data.toronto import Network
+
 import numpy as np
+
+
+def run_simulation_top_k(path, k, verbose=False):
+    PAM = build_probabilistic_adjacency(Network)
+
+    observations = [s.generate_observation() for s in path]
+    ll = execute_simulation(observations, Network, PAM, verbose)
+    ll = rewrap(ll)
+
+    if verbose:
+        for i in range(len(observations)):
+            print_beautify(path[i], observations[i], ll[i + 1], k)
+
+    return ll
 
 
 def normalize(x):
     return x / np.sum(x)
 
 
-def execute_simulation(observations, stations, PAM, verbose=False):
-    n = len(stations)
+def execute_simulation(observations, path, PAM, verbose=False):
+    n = len(path)
     I = np.eye(n) / n
     ll = np.ndarray((len(observations) + 1, n))
 
     def update(state, observation, PAM):
         state = PAM @ state
         new_state = np.array([
-            stations[i].probability_of_observation(*observation) * state[i]
+            path[i].probability_of_observation(*observation) * state[i]
             for i in range(n)
         ])
 
         return normalize(new_state)
-
-    def print_beautify(state, n_digits=2):
-        state = [round(x, n_digits) for x in state]
-        for i in range(len(state)):
-            print(stations[i].name, state[i])
 
     ll[0] = normalize(np.ones((n)))
 

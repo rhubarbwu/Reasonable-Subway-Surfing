@@ -35,20 +35,13 @@ class Station:
         self.idle_time = idle_time
         self.ridership = ridership
 
-        # Classification features.
-        self.natural_light = natural_light
-        self.platforms = platforms
-        self.rails = rails
-
         # Potential next stations.
-        self.connections = []
-
-    def connect(self, other):
-        self.connections.append(other)
-        other.connections.append(self)
+        self.forward = None
+        self.backward = None
+        self.opposite = None
+        self.transfers = []
 
     def generate_observation(self):
-        # May need to adjust variances.
         idle_time = gauss(self.idle_time[0], math.sqrt(self.idle_time[1]))
         ridership = gauss(self.ridership[0], math.sqrt(self.ridership[1]))
         return idle_time, ridership

@@ -1,4 +1,5 @@
-from lib.data.station import MINUTE, Station
+from .station import MINUTE, Station
+from .lines import *
 
 import math
 
@@ -6,110 +7,115 @@ import math
 TRAIN_FREQUENCY = 18 * 12
 
 
-# Custom Station constructor.
-def TTCStation(name,
-               idle_time,
-               daily_ridership,
-               platforms=2,
-               rails=2,
-               natural_light=False):
+def TTCStation(name, idle_time, daily_ridership):
     idle_time = (idle_time, idle_time / math.tau)
     ridership = daily_ridership / TRAIN_FREQUENCY
     ridership = (ridership, ridership / math.tau)
 
-    return Station(name, idle_time, ridership, platforms, rails, natural_light)
+    return Station(name, idle_time, ridership)
+
+
+def TTCInterior(name, idle_time, daily_ridership):
+    obverse = TTCStation(name, idle_time, daily_ridership)
+    reverse = TTCStation(name, idle_time, daily_ridership)
+
+    return [obverse, reverse]
+
+
+def TTCTerminus(name, idle_time, daily_ridership):
+    return [TTCStation(name, idle_time, daily_ridership)]
 
 
 # Average daily ridership in 2018 from
 # http://www.ttc.ca/PDF/Transit_Planning/Subway%20ridership%20-%202018.pdf
 
 # Line 1: Yonge-University-Spadina
-BloorYonge1 = TTCStation("Bloor-Yonge (1)", 31, 204630)
-College = TTCStation("College", 16, 44370)
-Davisville = TTCStation("Davisville", 14, 25990, 3, 3, True)
-DownsviewPark = TTCStation("Downsview Park", 12, 2520, 1, natural_light=True)
-Dundas = TTCStation("Dundas", 14, 73560)
-Dupont = TTCStation("Dupont", 14, 8500)
-Eglinton = TTCStation("Eglinton", 17, 68520, 1)
-EglintonWest = TTCStation("Eglinton West", 15, 21430, natural_light=True)
-Finch = TTCStation("Finch", 6 * MINUTE + 27, 99350, 1)
-FinchWest = TTCStation("Finch West", 18, 17660, 1)
-Glencairn = TTCStation("Glencairn", 12, 6940, 1, natural_light=True)
-Highway407 = TTCStation("Highway 407", 13, 3340, 1, natural_light=True)
-King = TTCStation("King", 13, 64730)
-Lawrence = TTCStation("Lawrence", 14, 22340, 1)
-LawrenceWest = TTCStation("Lawrence West", 13, 22340, 1, natural_light=True)
-Museum = TTCStation("Museum", 13, 11840, 1)
-NYCentre = TTCStation("North York Centre", 14, 25380)
-Osgoode = TTCStation("Osgoode", 14, 23670, 1)
-PioneerVillage = TTCStation("Pioneer Village", 14, 17320)
-Queen = TTCStation("Queen", 14, 48700)
-QueensPark = TTCStation("Queen's Park", 17, 46470, 1)
-Rosedale = TTCStation("Rosedale", 15, 7770, natural_light=True)
-SheppardWest = TTCStation("Sheppard West", 20, 41600, 1, natural_light=True)
-SheppardYonge1 = TTCStation("Sheppard-Yonge (1)", 23, 79720, 1)
-Spadina1 = TTCStation("Spadina (1)", 14, 12620)
-StAndrew = TTCStation("St. Andrew", 15, 57480, 1)
-StClair = TTCStation("St. Clair", 14, 36620)
-StClairWest = TTCStation("St. Clair West", 13, 27980)
-StGeorge1 = TTCStation("St. George (1)", 20, 130850, 1)
-StPatrick = TTCStation("St. Patrick", 15, 34060, 1)
-Summerhill = TTCStation("Summerhill", 14, 5710)
-Union = TTCStation("Union", 23, 143740)
-Yorkdale = TTCStation("Yorkdale", 15, 22860, 1, natural_light=True)
-YorkMills = TTCStation("York Mills", 16, 29660, 1)
-YorkUniversity = TTCStation("York University", 17, 43130, 1, natural_light=True)
-Vaughan = TTCStation("Vaughan Metropolitan Centre", 7 * MINUTE + 13, 14790, 1)
-Wellesley = TTCStation("Wellesley", 14, 23510)
-Wilson = TTCStation("Wilson", 19, 29260, 1, natural_light=True)
+BloorYonge1 = TTCInterior("Bloor-Yonge (1)", 31, 204630)
+College = TTCInterior("College", 16, 44370)
+Davisville = TTCInterior("Davisville", 14, 25990)
+DownsviewPark = TTCInterior("Downsview Park", 12, 2520)
+Dundas = TTCInterior("Dundas", 14, 73560)
+Dupont = TTCInterior("Dupont", 14, 8500)
+Eglinton = TTCInterior("Eglinton", 17, 68520)
+EglintonWest = TTCInterior("Eglinton West", 15, 21430)
+Finch = TTCTerminus("Finch", 6 * MINUTE + 27, 99350)
+FinchWest = TTCInterior("Finch West", 18, 17660)
+Glencairn = TTCInterior("Glencairn", 12, 6940)
+Highway407 = TTCInterior("Highway 407", 13, 3340)
+King = TTCInterior("King", 13, 64730)
+Lawrence = TTCInterior("Lawrence", 14, 22340)
+LawrenceWest = TTCInterior("Lawrence West", 13, 22340)
+Museum = TTCInterior("Museum", 13, 11840)
+NYCentre = TTCInterior("North York Centre", 14, 25380)
+Osgoode = TTCInterior("Osgoode", 14, 23670)
+PioneerVillage = TTCInterior("Pioneer Village", 14, 17320)
+Queen = TTCInterior("Queen", 14, 48700)
+QueensPark = TTCInterior("Queen's Park", 17, 46470)
+Rosedale = TTCInterior("Rosedale", 15, 7770)
+SheppardWest = TTCInterior("Sheppard West", 20, 41600)
+SheppardYonge1 = TTCInterior("Sheppard-Yonge (1)", 23, 79720)
+Spadina1 = TTCInterior("Spadina (1)", 14, 12620)
+StAndrew = TTCInterior("St. Andrew", 15, 57480)
+StClair = TTCInterior("St. Clair", 14, 36620)
+StClairWest = TTCInterior("St. Clair West", 13, 27980)
+StGeorge1 = TTCInterior("St. George (1)", 20, 130850)
+StPatrick = TTCInterior("St. Patrick", 15, 34060)
+Summerhill = TTCInterior("Summerhill", 14, 5710)
+Union = TTCInterior("Union", 23, 143740)
+Yorkdale = TTCInterior("Yorkdale", 15, 22860)
+YorkMills = TTCInterior("York Mills", 16, 29660)
+YorkUniversity = TTCInterior("York University", 17, 43130)
+Vaughan = TTCTerminus("Vaughan Metropolitan Centre", 7 * MINUTE + 13, 14790)
+Wellesley = TTCInterior("Wellesley", 14, 23510)
+Wilson = TTCInterior("Wilson", 19, 29260)
 
 # Line 2: Bloor-Danforth
-Bathurst = TTCStation("Bathurst", 16, 26800)
-Bay = TTCStation("Bay", 14, 32690)
-BloorYonge2 = TTCStation("Bloor-Yonge (2)", 28, 196460)
-Broadview = TTCStation("Broadview", 17, 32670)
-CastleFrank = TTCStation("Castle Frank", 13, 9760)
-Chester = TTCStation("Chester", 14, 5800)
-Christie = TTCStation("Christie", 15, 12510)
-Coxwell = TTCStation("Coxwell", 14, 15480)
-Donlands = TTCStation("Donlands", 14, 11250)
-Dufferin = TTCStation("Dufferin", 18, 28620)
-DundasWest = TTCStation("Dundas West", 15, 27540)
-Greenwood = TTCStation("Greenwood", 14, 11080)
-HighPark = TTCStation("High Park", 14, 12080, natural_light=True)
-Islington = TTCStation("Islington", 18, 41270, 1)
-Jane = TTCStation("Jane", 14, 20110)
-Keele = TTCStation("Keele", 14, 16990, natural_light=True)
-Kennedy2 = TTCStation("Kennedy (2)", 5 * MINUTE + 41, 80070)
-Kipling = TTCStation("Kipling", 5 * MINUTE + 18, 49340, 1, natural_light=True)
-Lansdowne = TTCStation("Lansdowne", 13, 19000)
-MainStreet = TTCStation("Main Street", 15, 23950)
-OldMill = TTCStation("Old Mill", 13, 8850, natural_light=True)
-Ossington = TTCStation("Ossington", 15, 30100)
-Pape = TTCStation("Pape", 17, 27080)
-RoyalYork = TTCStation("Royal York", 15, 22800)
-Runnymede = TTCStation("Runnymede", 14, 20110)
-Sherbourne = TTCStation("Sherbourne", 16, 31030)
-Spadina2 = TTCStation("Spadina (2)", 17, 31940)
-StGeorge2 = TTCStation("St. George (2)", 24, 125180, 1)
-VictoriaPark = TTCStation("Victoria Park", 15, 30780, natural_light=True)
-Warden = TTCStation("Warden", 17, 39980, 1, natural_light=True)
-Woodbine = TTCStation("Woodbine", 15, 14960)
+Bathurst = TTCInterior("Bathurst", 16, 26800)
+Bay = TTCInterior("Bay", 14, 32690)
+BloorYonge2 = TTCInterior("Bloor-Yonge (2)", 28, 196460)
+Broadview = TTCInterior("Broadview", 17, 32670)
+CastleFrank = TTCInterior("Castle Frank", 13, 9760)
+Chester = TTCInterior("Chester", 14, 5800)
+Christie = TTCInterior("Christie", 15, 12510)
+Coxwell = TTCInterior("Coxwell", 14, 15480)
+Donlands = TTCInterior("Donlands", 14, 11250)
+Dufferin = TTCInterior("Dufferin", 18, 28620)
+DundasWest = TTCInterior("Dundas West", 15, 27540)
+Greenwood = TTCInterior("Greenwood", 14, 11080)
+HighPark = TTCInterior("High Park", 14, 12080)
+Islington = TTCInterior("Islington", 18, 41270)
+Jane = TTCInterior("Jane", 14, 20110)
+Keele = TTCInterior("Keele", 14, 16990)
+Kennedy2 = TTCTerminus("Kennedy (2)", 5 * MINUTE + 41, 80070)
+Kipling = TTCTerminus("Kipling", 5 * MINUTE + 18, 49340)
+Lansdowne = TTCInterior("Lansdowne", 13, 19000)
+MainStreet = TTCInterior("Main Street", 15, 23950)
+OldMill = TTCInterior("Old Mill", 13, 8850)
+Ossington = TTCInterior("Ossington", 15, 30100)
+Pape = TTCInterior("Pape", 17, 27080)
+RoyalYork = TTCInterior("Royal York", 15, 22800)
+Runnymede = TTCInterior("Runnymede", 14, 20110)
+Sherbourne = TTCInterior("Sherbourne", 16, 31030)
+Spadina2 = TTCInterior("Spadina (2)", 17, 31940)
+StGeorge2 = TTCInterior("St. George (2)", 24, 125180)
+VictoriaPark = TTCInterior("Victoria Park", 15, 30780)
+Warden = TTCInterior("Warden", 17, 39980)
+Woodbine = TTCInterior("Woodbine", 15, 14960)
 
 # Line 3: Scarborough
-Ellesmere = TTCStation("Ellesmere", 13, 1770)
-Kennedy3 = TTCStation("Kennedy (3)", 25, 31120)
-LawrenceEast = TTCStation("Lawrence East", 14, 7930)
-McCowan = TTCStation("McCowan", 3 * MINUTE, 3860)
-Midland = TTCStation("Midland", 13, 2440)
-ScarboroughCentre = TTCStation("Scarborough Centre", 14, 23050)
+Ellesmere = TTCInterior("Ellesmere", 13, 1770)
+Kennedy3 = TTCTerminus("Kennedy (3)", 25, 31120)
+LawrenceEast = TTCInterior("Lawrence East", 14, 7930)
+McCowan = TTCTerminus("McCowan", 3 * MINUTE, 3860)
+Midland = TTCInterior("Midland", 13, 2440)
+ScarboroughCentre = TTCInterior("Scarborough Centre", 14, 23050)
 
 # Line 4: Sheppard
-Bayview = TTCStation("Bayview", 14, 8530)
-Bessarion = TTCStation("Bessarion", 14, 2990)
-DonMills = TTCStation("Don Mills", 5 * MINUTE + 14, 37050, 1)
-Leslie = TTCStation("Leslie", 14, 5990)
-SheppardYonge4 = TTCStation("Sheppard-Yonge (4)", 4 * MINUTE + 49, 45750, 3)
+Bayview = TTCInterior("Bayview", 14, 8530)
+Bessarion = TTCInterior("Bessarion", 14, 2990)
+DonMills = TTCTerminus("Don Mills", 5 * MINUTE + 14, 37050)
+Leslie = TTCInterior("Leslie", 14, 5990)
+SheppardYonge4 = TTCTerminus("Sheppard-Yonge (4)", 4 * MINUTE + 49, 45750)
 
 # Station ordering.
 Line1 = [
@@ -130,20 +136,25 @@ Line2 = [
 Line3 = [Kennedy3, LawrenceEast, Ellesmere, Midland, ScarboroughCentre, McCowan]
 Line4 = [SheppardYonge4, Bayview, Bessarion, Leslie, DonMills]
 
-# Natural line connections.
-for line in [Line1, Line2, Line3, Line4]:
-    for i in range(len(line) - 1):
-        line[i].connect(line[i + 1])
+NetworkWrapped = [s[0] for s in Line1 + Line2 + Line3 + Line4]
 
-# Transfer connections.
-BloorYonge1.connect(BloorYonge2)
-Kennedy2.connect(Kennedy3)
-SheppardYonge1.connect(SheppardYonge4)
-Spadina1.connect(Spadina2)
-StGeorge1.connect(StGeorge2)
+Line1 = flatten(natural_connections(Line1))
+Line2 = flatten(natural_connections(Line2))
+Line3 = flatten(natural_connections(Line3))
+Line4 = flatten(natural_connections(Line4))
 
 # Entire subway system network.
 Network = Line1 + Line2 + Line3 + Line4
+NetworkLengths = [len(Line1), len(Line2), len(Line3), len(Line4)]
+
+TerminusIndices = [-1]
+for l in NetworkLengths:
+    prev = TerminusIndices[-1]
+    start = prev + 1
+    end = prev + l
+    TerminusIndices.append(start)
+    TerminusIndices.append(end)
+TerminusIndices = set(TerminusIndices[1:])
 
 # Sanity check.
 if __name__ == "__main__":
