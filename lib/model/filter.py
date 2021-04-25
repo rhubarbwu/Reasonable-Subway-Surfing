@@ -6,7 +6,7 @@ from ..visualization.likelihood import show_likelihoods
 import numpy as np
 
 
-def run_simulation_top_k(path, k, verbose=False, output_dir=None):
+def run_simulation_top_k(path, k, output_dir, verbose=False):
     PAM = build_probabilistic_adjacency(Network)
 
     observations = [s.generate_observation() for s in path]
@@ -16,6 +16,7 @@ def run_simulation_top_k(path, k, verbose=False, output_dir=None):
     if verbose:
         for i in range(len(observations)):
             print_beautify(path[i], observations[i], ll[i + 1], k)
+        print(output_dir)
         show_likelihoods("lib/visualization/images/ttc_map.jpg", ll, path,
                          observations, output_dir)
 

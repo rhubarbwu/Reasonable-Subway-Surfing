@@ -16,7 +16,6 @@ def build_probabilistic_adjacency(stations):
             def compute_matrix_val(connection, weight):
                 if stn_j == connection:
                     prob_adj_matrix[i][j] = weight / total_weight
-                    prob_adj_matrix[j][i] = weight / total_weight
 
             compute_matrix_val(stn_i.backward, backward)
             compute_matrix_val(stn_i.forward, forward)

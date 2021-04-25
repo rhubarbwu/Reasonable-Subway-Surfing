@@ -8,9 +8,9 @@ TRAIN_FREQUENCY = 18 * 12
 
 
 def TTCStation(name, idle_time, daily_ridership):
-    idle_time = (idle_time, idle_time / math.tau)
+    idle_time = (idle_time, math.sqrt(idle_time))
     ridership = daily_ridership / TRAIN_FREQUENCY
-    ridership = (ridership, ridership / math.tau)
+    ridership = (ridership, math.sqrt(ridership))
 
     return Station(name, idle_time, ridership)
 

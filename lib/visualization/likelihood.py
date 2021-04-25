@@ -151,24 +151,3 @@ def show_likelihoods(image_file,
         for i in range(n):
             output_filename = os.path.join(output_dir, f"frame{i}.png")
             images[i].save(output_filename)
-
-
-# this commented out code helped label the dots
-# from lib.data.toronto import *
-# names=[]
-# for station in Network:
-#     names.append(station.name)
-# i=[0]
-# print(names[i[0]])
-# dic={}
-# def onclick(event):
-#     print('%s click: button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %
-#           ('double' if event.dblclick else 'single', event.button,
-#            event.x, event.y, event.xdata, event.ydata))
-#     dic[names[i[0]]]=(event.xdata, event.ydata)
-#     circle = plt.Circle((event.xdata, event.ydata), 5, color='r')
-#     ax.add_patch(circle)
-#     i[0]+=1
-#     if len(names) != i[0]:
-#         print(names[i[0]])
-#cid = fig.canvas.mpl_connect('button_press_event', onclick)

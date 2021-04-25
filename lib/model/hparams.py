@@ -1,4 +1,4 @@
 backward = 1
-forward = 6
+forward = 24
 opposite = 1
-transfer = 1
+transfer = 12

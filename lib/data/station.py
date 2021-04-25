@@ -36,7 +36,7 @@ class Station:
     def generate_observation(self):
         idle_time = gauss(self.idle_time[0], self.idle_time[1])
         ridership = gauss(self.ridership[0], self.ridership[1])
-        return idle_time, ridership
+        return max(0., idle_time), int(max(0., ridership))
 
     def probability_of_observation(self, idle_time, ridership):
 
